@@ -48,4 +48,7 @@ public class Usuario {
 
     @Column(name = "dt_alter")
     private LocalDateTime dataAlteracao;
+
+    @Transient
+    private String grupo;
 }

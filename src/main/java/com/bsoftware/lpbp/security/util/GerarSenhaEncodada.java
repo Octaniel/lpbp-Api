@@ -6,8 +6,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class GerarSenhaEncodada {
     public static void main(String[] args) {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        System.out.println(encoder.encode("carla"));
-        System.out.println(encoder.encode("diana"));
-        System.out.println(encoder.encode("ermilinda"));
+        System.out.println(encoder.encode("chris"));
+//        System.out.println(encoder.encode("bela"));
+//        System.out.println(encoder.encode("carla"));
+//        System.out.println(encoder.encode("daniel"));
+//        System.out.println(encoder.encode("elton"));
     }
 }

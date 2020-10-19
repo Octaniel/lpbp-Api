@@ -35,6 +35,8 @@ public class Pessoa {
     @NotNull(message = "Telemovel é obrigatorio")
     private String telemovel;
 
+    private String codigo;
+
     private LocalDate dataNascimento;
 
     @Column(name = "dt_cria")

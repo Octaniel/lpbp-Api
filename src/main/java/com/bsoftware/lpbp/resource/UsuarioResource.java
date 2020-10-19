@@ -1,5 +1,6 @@
 package com.bsoftware.lpbp.resource;
 
+import com.bsoftware.lpbp.model.Grupo;
 import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
 import com.bsoftware.lpbp.service.UsuarioService;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("usuario")
@@ -32,7 +35,14 @@ public class UsuarioResource {
 
     @GetMapping("/{id}")
     public Usuario atualizar(@PathVariable Long id) {
-        return UsuarioRepository.findById(id).orElse(null);
+        Usuario usuario = UsuarioRepository.findById(id).orElse(null);
+        AtomicReference<String> grupo = new AtomicReference<>();
+        assert usuario != null;
+        List<Grupo> grupos = usuario.getGrupos();
+        grupos.sort(Comparator.comparing(Grupo::getNome));
+        grupos.forEach(x-> grupo.set(x.getNome()));
+        usuario.setGrupo(grupo.get());
+        return usuario;
     }
 
     @PostMapping("add")
