@@ -1,5 +1,6 @@
 package com.bsoftware.lpbp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,18 @@ public class Pessoa {
     @Column(name = "dt_alter")
     private LocalDateTime dataAlteracao;
 
-    @Transient
+    @JsonManagedReference("pessoa_presenca")
+    @OneToMany(mappedBy = "pessoa",cascade = CascadeType.ALL)
     private List<Presenca> presencas;
+
+    @PrePersist
+    public void antesSalvar(){
+        dataAlteracao = LocalDateTime.now();
+        dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void antesAtualizar(){
+        dataAlteracao = LocalDateTime.now();
+    }
 }

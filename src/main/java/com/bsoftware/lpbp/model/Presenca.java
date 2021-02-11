@@ -1,5 +1,6 @@
 package com.bsoftware.lpbp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class Presenca implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference("pessoa_presenca")
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;

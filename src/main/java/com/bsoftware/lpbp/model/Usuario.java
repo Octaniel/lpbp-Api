@@ -28,9 +28,9 @@ public class Usuario {
 
     private String senha;
 
-    @NotNull(message = "Tens que selecionar um banco")
+    @NotNull(message = "Tens que selecionar uma pessoa")
     @JoinColumn(name = "id_pessoa")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Pessoa pessoa;
 
     @Transient
@@ -49,6 +49,17 @@ public class Usuario {
     @Column(name = "dt_alter")
     private LocalDateTime dataAlteracao;
 
-    @Transient
-    private String grupo;
+    @Column(name = "tipo")
+    private String tipo;
+
+    @PrePersist
+    public void antesSalvar(){
+        dataAlteracao = LocalDateTime.now();
+        dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void antesAtualizar(){
+        dataAlteracao = LocalDateTime.now();
+    }
 }

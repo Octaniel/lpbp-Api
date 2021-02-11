@@ -15,7 +15,7 @@
 	<description>Livro de Ponto de Bom Preço</description>
 
 	<properties>
-		<java.version>14</java.version>
+		<java.version>15</java.version>
 	</properties>
 
 	<dependencies>
@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>9.4-1200-jdbc41</version>
+			<version>42.2.18</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.validation</groupId>

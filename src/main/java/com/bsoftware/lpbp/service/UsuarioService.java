@@ -41,6 +41,8 @@ public class UsuarioService {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         usuario.setSenha(encoder.encode(usuario.getSenha()));
 
+        usuario.getPessoa().setCodigo(criarCodigo());
+
         Usuario save = usuarioRepository.save(usuario);
 //        Usuario one = usuarioRepository.getOne(save.getId());
         publisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, save.getId()));
@@ -49,8 +51,8 @@ public class UsuarioService {
     }
 
     private void validar(Usuario usuario, Long id) {
-        if (!usuario.getSenha().equals(usuario.getConfirmacaoSenha()))
-            throw new UsuarioException("A Senha e a confirmação de senha são diferentes");
+//        if (!usuario.getSenha().equals(usuario.getConfirmacaoSenha()))
+//            throw new UsuarioException("A Senha e a confirmação de senha são diferentes");
         List<Usuario> all = usuarioRepository.findAll();
         all.forEach(x -> {
             if (usuario.getNome().equals(x.getNome()) && !x.getId().equals(id))
@@ -84,6 +86,12 @@ public class UsuarioService {
         String senha = (random1.nextInt(9) + 1) + "" + s.charAt(1) + "" + (random1.nextInt(9) + 1) + "" + s.charAt(3);
         senha += (random1.nextInt(9) + 1) + "" + s.charAt(1) + "" + (random1.nextInt(9) + 1) + "" + s.charAt(3);
         return senha;
+    }
+
+    private String criarCodigo() {
+        Random random1 = new Random();
+        return ""+(random1.nextInt(9)+1)+(random1.nextInt(9)+1)+(random1.nextInt(9)+1)+
+                (random1.nextInt(9)+1)+(random1.nextInt(9)+1);
     }
 
     public Usuario atualizar(Long id, Usuario usuario) {
