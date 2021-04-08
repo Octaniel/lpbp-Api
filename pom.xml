@@ -15,7 +15,7 @@
 	<description>Livro de Ponto de Bom Preço</description>
 
 	<properties>
-		<java.version>15</java.version>
+		<java.version>16</java.version>
 	</properties>
 
 	<dependencies>
@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
+			<version>1.18.20</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
