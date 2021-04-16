@@ -1,3 +1,8 @@
+GET http://localhost:8081/usuario/registar
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+###
 POST https://onesignal.com/api/v1/notifications
 Content-Type: application/json
 Authorization: Basic ODFlODdhMTUtMDAwNy00MTIxLTkwZTgtYTVlNDM0OGM3MTA0
@@ -10,10 +15,11 @@ Authorization: Basic ODFlODdhMTUtMDAwNy00MTIxLTkwZTgtYTVlNDM0OGM3MTA0
 ###
 
 
-POST http://172.25.192.1:8080/oauth/token
+POST http://localhost:8081/oauth/token
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic YW5ndWxhcjpAbmd1bEByMA==
+bmobile: h
 
-client=angular&username=109603180&password=11112222&grant_type=password
+client=angular&username=chris@gmail.com&password=chris&grant_type=password
 
 > {% client.global.set("access_token", response.body.access_token); %}

@@ -12,4 +12,5 @@ import java.util.List;
  */
 public interface PresencaRepository extends JpaRepository<Presenca, Long> {
     List<Presenca> findAllByPessoaId(Long idPessoa);
+    List<Presenca> findAllByValidado(Boolean validado);
 }

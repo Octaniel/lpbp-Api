@@ -2,6 +2,7 @@ package com.bsoftware.lpbp.repository;
 
 
 import com.bsoftware.lpbp.model.Pessoa;
+import com.bsoftware.lpbp.model.Turno;
 import com.bsoftware.lpbp.repository.pessoa.PessoaRepositoryQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,4 +16,5 @@ import java.util.Optional;
  */
 public interface PessoaRepository extends JpaRepository<Pessoa, Long>, PessoaRepositoryQuery {
     Optional<Pessoa> findByCodigoEquals(String codigo);
+    List<Pessoa> findAllByTurno(Turno turno);
 }

@@ -2,6 +2,7 @@ package com.bsoftware.lpbp.resource;
 
 import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
+import com.bsoftware.lpbp.service.ScheduledTask;
 import com.bsoftware.lpbp.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,13 @@ import java.util.List;
 public class UsuarioResource {
 
     private final UsuarioRepository UsuarioRepository;
-
     private final UsuarioService usuarioService;
+    private final ScheduledTask scheduledTask;
 
-    public UsuarioResource(UsuarioRepository UsuarioRepository, UsuarioService UsuarioService) {
+    public UsuarioResource(UsuarioRepository UsuarioRepository, UsuarioService UsuarioService, ScheduledTask scheduledTask) {
         this.UsuarioRepository = UsuarioRepository;
         this.usuarioService = UsuarioService;
+        this.scheduledTask = scheduledTask;
     }
 
     @GetMapping("listar")
@@ -29,8 +31,12 @@ public class UsuarioResource {
         return UsuarioRepository.findAll();
     }
 
+    @GetMapping("registar")
+    public void registar() {
+        scheduledTask.registar();
+    }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Usuario atualizar(@PathVariable Long id) {
         return UsuarioRepository.findById(id).orElse(null);
     }
@@ -40,13 +46,13 @@ public class UsuarioResource {
         return usuarioService.salvar(Usuario, httpServletResponse);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public Usuario atualizar(@PathVariable Long id, @Valid @RequestBody Usuario Usuario) {
         return usuarioService.atualizar(id, Usuario);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public void remover(@PathVariable Long id) {
         UsuarioRepository.deleteById(id);
     }

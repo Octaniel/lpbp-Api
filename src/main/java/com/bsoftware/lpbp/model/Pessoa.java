@@ -40,6 +40,9 @@ public class Pessoa {
 
     private LocalDate dataNascimento;
 
+    @Enumerated(EnumType.STRING)
+    private Turno turno;
+
     @Column(name = "dt_cria")
     private LocalDateTime dataCriacao;
 

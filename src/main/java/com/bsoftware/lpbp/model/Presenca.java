@@ -40,6 +40,8 @@ public class Presenca implements Serializable {
     @Column(name = "aceito_gerente")
     private Boolean justificacaoAceitoPorGerente;
 
+    private Boolean validado;
+
     @Column(name = "aceito_admin")
     private Boolean justificacaoAceitoPorAdministrador;
 
