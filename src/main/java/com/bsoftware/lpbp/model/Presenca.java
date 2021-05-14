@@ -54,8 +54,6 @@ public class Presenca implements Serializable {
     @Column(name = "dt_alter")
     private LocalDateTime dataAlteracao;
 
-
-
     @Transient
     private String codigo;
 }

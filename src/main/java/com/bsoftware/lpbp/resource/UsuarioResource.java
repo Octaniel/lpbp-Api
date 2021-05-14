@@ -4,12 +4,14 @@ import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
 import com.bsoftware.lpbp.service.ScheduledTask;
 import com.bsoftware.lpbp.service.UsuarioService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -34,6 +36,12 @@ public class UsuarioResource {
     @GetMapping("registar")
     public void registar() {
         scheduledTask.registar();
+    }
+
+    @GetMapping("setarTodosAsPresencasParaPresenteEntre")
+    public void setarTodosAsPresencasParaPresenteEntre(@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss") LocalDateTime de,
+                                                       @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss") LocalDateTime ate) {
+        scheduledTask.setarTodosAsPresencasParaPresenteEntre(de, ate);
     }
 
     @GetMapping("{id}")

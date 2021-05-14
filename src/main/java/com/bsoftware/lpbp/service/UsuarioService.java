@@ -2,6 +2,7 @@ package com.bsoftware.lpbp.service;
 
 import com.bsoftware.lpbp.event.RecursoCriadoEvent;
 import com.bsoftware.lpbp.model.Usuario;
+import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
 import com.bsoftware.lpbp.service.exeption.UsuarioException;
 import net.bytebuddy.utility.RandomString;
@@ -26,33 +27,34 @@ public class UsuarioService {
 //    private final JavaMailSender mailSender;
 
     private final UsuarioRepository usuarioRepository;
+    private final PessoaRepository pessoaRepository;
 
-    public UsuarioService(ApplicationEventPublisher publisher, UsuarioRepository usuarioRepository) {
+    public UsuarioService(ApplicationEventPublisher publisher, UsuarioRepository usuarioRepository,
+                          PessoaRepository pessoaRepository) {
         this.publisher = publisher;
         this.usuarioRepository = usuarioRepository;
+        this.pessoaRepository = pessoaRepository;
     }
 
     public ResponseEntity<Usuario> salvar(Usuario usuario, HttpServletResponse httpServletResponse) {
-        validar(usuario, 0L);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        usuario.setDataAlteracao(localDateTime);
-        usuario.setDataCriacao(localDateTime);
+        validar(usuario, usuario.getId());
+        if(usuario.getId()==null) {
+            PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+            usuario.setSenha(encoder.encode(usuario.getSenha()));
 
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        usuario.setSenha(encoder.encode(usuario.getSenha()));
-
-        usuario.getPessoa().setCodigo(criarCodigo());
+            String s;
+            do {
+                s = criarCodigo();
+            } while (pessoaRepository.findByCodigo(s) != null);
+            usuario.getPessoa().setCodigo(s);
+        }
 
         Usuario save = usuarioRepository.save(usuario);
-//        Usuario one = usuarioRepository.getOne(save.getId());
         publisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, save.getId()));
-        //String s = enviarEmail(one.getCliente().getPessoa().getEmail(), one.getCliente().getPessoa().getCodigo());
         return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }
 
     private void validar(Usuario usuario, Long id) {
-//        if (!usuario.getSenha().equals(usuario.getConfirmacaoSenha()))
-//            throw new UsuarioException("A Senha e a confirmação de senha são diferentes");
         List<Usuario> all = usuarioRepository.findAll();
         all.forEach(x -> {
             if (usuario.getNome().equals(x.getNome()) && !x.getId().equals(id))
@@ -101,7 +103,7 @@ public class UsuarioService {
         BeanUtils.copyProperties(usuario, byId.orElse(null), "id", "dataCriacao", "senha", "senhaTemporaria", "usuarioCriouId", "empresa");
         byId.get().setDataAlteracao(LocalDateTime.now());
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        byId.get().setSenha(encoder.encode(usuario.getSenha()));
+//        byId.get().setSenha(encoder.encode(usuario.getSenha()));
         return usuarioRepository.save(byId.get());
     }
 }

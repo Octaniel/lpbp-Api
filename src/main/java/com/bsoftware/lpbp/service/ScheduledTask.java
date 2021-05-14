@@ -3,8 +3,10 @@ package com.bsoftware.lpbp.service;
 import com.bsoftware.lpbp.model.Pessoa;
 import com.bsoftware.lpbp.model.Presenca;
 import com.bsoftware.lpbp.model.Turno;
+import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.PresencaRepository;
+import com.bsoftware.lpbp.repository.UsuarioRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +24,13 @@ public class ScheduledTask {
 
     private final PessoaRepository pessoaRepository;
     private final PresencaRepository presencaRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public ScheduledTask(PessoaRepository pessoaRepository, PresencaRepository presencaRepository) {
+    public ScheduledTask(PessoaRepository pessoaRepository, PresencaRepository presencaRepository,
+                         UsuarioRepository usuarioRepository) {
         this.pessoaRepository = pessoaRepository;
         this.presencaRepository = presencaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Scheduled(cron = "0 0 1 * * SUN")
@@ -39,7 +44,7 @@ public class ScheduledTask {
                 collect(Collectors.toList());
         pessoaRepository.saveAll(collect1);
     }
-    @Scheduled(cron = "0 0 8-19 ? * MON-FRI")
+    @Scheduled(cron = "0 0 8-18 ? * MON-SAT")
     public void registarScheduled(){
         Random random = new Random();
         int i = random.nextInt(59) + 1;
@@ -95,9 +100,11 @@ public class ScheduledTask {
                 collect(Collectors.toList());
         LocalDateTime now = LocalDateTime.now();
         if (now.getHour() > 13 || (now.getHour() == 13 && now.getMinute() >= 30)) {
-            pessoaRepository.findAllByTurno(Turno.TARDE).forEach(pessoa -> salvarPresencaFalta(collect, pessoa));
+            usuarioRepository.findByPessoaTurnoAndTipo(Turno.TARDE, "Vendedor").stream().map(Usuario::getPessoa).
+                    collect(Collectors.toList()).forEach(pessoa -> salvarPresencaFalta(collect, pessoa));
         } else {
-            pessoaRepository.findAllByTurno(Turno.MANHA).forEach(pessoa -> salvarPresencaFalta(collect, pessoa));
+            usuarioRepository.findByPessoaTurnoAndTipo(Turno.MANHA, "Vendedor").stream().map(Usuario::getPessoa).
+            collect(Collectors.toList()).forEach(pessoa -> salvarPresencaFalta(collect, pessoa));
         }
         List<Presenca> collect1 = allByValidado.stream().peek(presenca -> presenca.setValidado(true)).
                 collect(Collectors.toList());
@@ -125,5 +132,10 @@ public class ScheduledTask {
             }
         }
         return false;
+    }
+
+    public void setarTodosAsPresencasParaPresenteEntre(LocalDateTime de, LocalDateTime ate){
+        List<Presenca> presencas = presencaRepository.presencasEntre(de, ate);
+        presencaRepository.deleteAll(presencas);
     }
 }
