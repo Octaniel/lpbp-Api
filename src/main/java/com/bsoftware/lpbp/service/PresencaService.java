@@ -44,6 +44,18 @@ public class PresencaService {
         presenca.setPessoa(byCodigo.get());
         presenca.setPresente(true);
         presenca.setValidado(false);
+        return getPresencaResponseEntity(presenca, httpServletResponse);
+    }
+
+    public ResponseEntity<Presenca> salvarOffline(Presenca presenca, HttpServletResponse httpServletResponse) {
+        Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(presenca.getCodigo());
+        byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
+        presenca.setPessoa(byCodigo.get());
+        presenca.setValidado(true);
+        return getPresencaResponseEntity(presenca, httpServletResponse);
+    }
+
+    private ResponseEntity<Presenca> getPresencaResponseEntity(Presenca presenca, HttpServletResponse httpServletResponse) {
         presenca.setJustificada(false);
         LocalDateTime now = LocalDateTime.now();
         presenca.setDataAlteracao(now);

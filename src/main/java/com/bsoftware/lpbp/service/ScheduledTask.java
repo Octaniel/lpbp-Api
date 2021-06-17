@@ -44,7 +44,7 @@ public class ScheduledTask {
                 collect(Collectors.toList());
         pessoaRepository.saveAll(collect1);
     }
-    @Scheduled(cron = "0 0 8-18 ? * MON-SAT")
+//    @Scheduled(cron = "0 0 8-18 ? * MON-SAT")
     public void registarScheduled(){
         Random random = new Random();
         int i = random.nextInt(59) + 1;

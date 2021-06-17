@@ -31,6 +31,11 @@ public class PresencaResource {
         return presencaService.salvar(presenca, httpServletResponse);
     }
 
+    @PostMapping("offline")
+    public ResponseEntity<Presenca> salvarOffline(@RequestBody Presenca presenca, HttpServletResponse httpServletResponse) {
+        return presencaService.salvarOffline(presenca, httpServletResponse);
+    }
+
     @GetMapping
     public List<PresencaResumo> listar(PresencaFilter presencaFilter) {
         return presencaRepository.geralList(presencaFilter);
