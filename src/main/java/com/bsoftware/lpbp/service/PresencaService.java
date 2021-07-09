@@ -11,19 +11,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.metamodel.ListAttribute;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PresencaService {
@@ -51,15 +45,14 @@ public class PresencaService {
         Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(presenca.getCodigo());
         byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
         presenca.setPessoa(byCodigo.get());
+        if (byCodigo.get().getTurno().equals(Turno.FERIA)) presenca.setPresente(true);
         presenca.setValidado(true);
         return getPresencaResponseEntity(presenca, httpServletResponse);
     }
 
     private ResponseEntity<Presenca> getPresencaResponseEntity(Presenca presenca, HttpServletResponse httpServletResponse) {
         presenca.setJustificada(false);
-        LocalDateTime now = LocalDateTime.now();
-        presenca.setDataAlteracao(now);
-        presenca.setDataCriacao(now);
+        presenca.setDataAlteracao(presenca.getDataCriacao());
         presencas.add(presenca);
         Presenca save = presencaRepository.save(presenca);
         publisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, save.getId()));

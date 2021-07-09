@@ -100,8 +100,10 @@ public class UsuarioService {
         validar(usuario, id);
         Optional<Usuario> byId = usuarioRepository.findById(id);
         assert byId.orElse(null) != null;
+        LocalDateTime dataCriacao = byId.get().getDataCriacao();
         BeanUtils.copyProperties(usuario, byId.orElse(null), "id", "dataCriacao", "senha", "senhaTemporaria", "usuarioCriouId", "empresa");
         byId.get().setDataAlteracao(LocalDateTime.now());
+        byId.get().setDataCriacao(dataCriacao);
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //        byId.get().setSenha(encoder.encode(usuario.getSenha()));
         return usuarioRepository.save(byId.get());

@@ -7,7 +7,6 @@ import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
@@ -33,7 +32,7 @@ public class ScheduledTask {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @Scheduled(cron = "0 0 1 * * SUN")
+//    @Scheduled(cron = "0 0 1 * * SUN")
     public void trocarTurno(){
         List<Pessoa> allByTurno = pessoaRepository.findAllByTurno(Turno.MANHA);
         List<Pessoa> allByTurno1 = pessoaRepository.findAllByTurno(Turno.TARDE);
@@ -44,6 +43,7 @@ public class ScheduledTask {
                 collect(Collectors.toList());
         pessoaRepository.saveAll(collect1);
     }
+
 //    @Scheduled(cron = "0 0 8-18 ? * MON-SAT")
     public void registarScheduled(){
         Random random = new Random();
