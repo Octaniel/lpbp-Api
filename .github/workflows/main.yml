@@ -26,5 +26,5 @@ jobs:
         run: |
           mvn package
           docker build -t lpbp-api .
-          docker tag lpbp-api otaniel/lpbp-api:0.0.3
-          docker push otaniel/lpbp-api:0.0.3
+          docker tag lpbp-api otaniel/lpbp-api:0.0.4
+          docker push otaniel/lpbp-api:0.0.4
