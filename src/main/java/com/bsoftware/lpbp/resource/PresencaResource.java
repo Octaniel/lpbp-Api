@@ -41,6 +41,11 @@ public class PresencaResource {
         return presencaRepository.geralList(presencaFilter);
     }
 
+    @GetMapping("idPessoa/{id}")
+    public List<Presenca> listarPorIdPessoa(@PathVariable Long id) {
+        return presencaRepository.findAllByPessoaId(id);
+    }
+
     @PutMapping
     public Presenca atualizar(@RequestBody Presenca presenca) {
         return presencaService.atualizar(presenca);
