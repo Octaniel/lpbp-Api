@@ -65,4 +65,16 @@ public class PresencaService {
         byId.get().setDataAlteracao(LocalDateTime.now());
         return presencaRepository.save(byId.get());
     }
+
+    public Boolean adicionarUrlVideo(String urlVideo, Long id) {
+
+        Presenca presenca = presencaRepository.findById(id).orElse(null);
+        if(presenca != null){
+            presenca.setNomeAudio(urlVideo);
+            presenca.setDataAlteracao(LocalDateTime.now());
+            presencaRepository.save(presenca);
+            return true;
+        }
+        return false;
+    }
 }

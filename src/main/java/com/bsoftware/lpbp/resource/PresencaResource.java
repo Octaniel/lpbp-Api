@@ -51,6 +51,10 @@ public class PresencaResource {
         return presencaRepository.findAllByPessoaId(id);
     }
 
+    @PatchMapping
+    public Boolean adicionarUrlVideo(String urlVideo, Long id) {
+        return presencaService.adicionarUrlVideo(urlVideo, id);
+    }
     @PutMapping
     public Presenca atualizar(@RequestBody Presenca presenca) {
         return presencaService.atualizar(presenca);
