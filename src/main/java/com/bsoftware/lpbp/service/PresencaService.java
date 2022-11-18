@@ -32,12 +32,13 @@ public class PresencaService {
         this.pessoaRepository = pessoaRepository;
     }
 
-    public ResponseEntity<Presenca> salvar(String codigoPessoa, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<Presenca> salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
         Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(codigoPessoa);
         byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
         Presenca presenca = new Presenca();
         presenca.setPessoa(byCodigo.get());
         presenca.setPresente(true);
+        presenca.setNomeFoto(urlFoto);
         presenca.setValidado(false);
         presenca.setDataCriacao(LocalDateTime.now());
         presenca.setDataAlteracao(LocalDateTime.now());

@@ -27,8 +27,8 @@ public class PresencaResource {
     }
 
     @PostMapping
-    public ResponseEntity<Presenca> salvar(String codigoPessoa, HttpServletResponse httpServletResponse) {
-        return presencaService.salvar(codigoPessoa, httpServletResponse);
+    public ResponseEntity<Presenca> salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
+        return presencaService.salvar(codigoPessoa, urlFoto, httpServletResponse);
     }
 
     @PostMapping("offline")
