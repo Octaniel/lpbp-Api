@@ -4,10 +4,10 @@ Accept: application/json
 
 ###
 POST https://onesignal.com/api/v1/notifications
-Content-Type: application/json
-Authorization: Basic ODFlODdhMTUtMDAwNy00MTIxLTkwZTgtYTVlNDM0OGM3MTA0
+Content-Type: application/json; charset=utf-8
+Authorization: Basic NmY1NTZkNjMtYmNlMy00ZDk3LTk3MTktMmNmODhlYWU5OGE0
 
-{"app_id": "b856e4e5-e7c5-46cf-95e6-b67aea0fa4e7",
+{"app_id": "7cd8a33b-86f3-4167-8fe9-61d308cf3248",
 "contents": {"en": "English Octa"},
 "headings": {"en": "JS Octaniel"},
 "included_segments": ["Subscribed Users"]}

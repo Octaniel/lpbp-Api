@@ -32,8 +32,8 @@ public class PresencaResource {
     }
 
     @PostMapping("offline")
-    public ResponseEntity<Presenca> salvarOffline(@RequestBody Presenca presenca, HttpServletResponse httpServletResponse) {
-        return presencaService.salvarOffline(presenca, httpServletResponse);
+    public ResponseEntity<Presenca> salvarOffline(String codigoPessoa, String urlFoto, String date, boolean presente, HttpServletResponse httpServletResponse) {
+        return presencaService.salvarOffline(codigoPessoa, urlFoto, date, presente, httpServletResponse);
     }
 
     @GetMapping

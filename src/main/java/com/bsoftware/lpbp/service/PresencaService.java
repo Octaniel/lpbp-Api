@@ -39,18 +39,25 @@ public class PresencaService {
         presenca.setPessoa(byCodigo.get());
         presenca.setPresente(true);
         presenca.setNomeFoto(urlFoto);
-        presenca.setValidado(false);
+        presenca.setValidado(true);
         presenca.setDataCriacao(LocalDateTime.now());
         presenca.setDataAlteracao(LocalDateTime.now());
         return getPresencaResponseEntity(presenca, httpServletResponse);
     }
 
-    public ResponseEntity<Presenca> salvarOffline(Presenca presenca, HttpServletResponse httpServletResponse) {
-        Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(presenca.getCodigo());
+    public ResponseEntity<Presenca> salvarOffline(String codigoPessoa, String urlFoto, String date, boolean presente, HttpServletResponse httpServletResponse) {
+        Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(codigoPessoa);
         byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
+        Presenca presenca = new Presenca();
         presenca.setPessoa(byCodigo.get());
         if (byCodigo.get().getTurno().equals(Turno.FERIA)) presenca.setPresente(true);
         presenca.setValidado(true);
+        presenca.setPresente(presente);
+        presenca.setNomeFoto(urlFoto);
+        String[] split = date.split("&");
+        LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
+        presenca.setDataCriacao(dateTime);
+        presenca.setDataAlteracao(dateTime);
         return getPresencaResponseEntity(presenca, httpServletResponse);
     }
 
