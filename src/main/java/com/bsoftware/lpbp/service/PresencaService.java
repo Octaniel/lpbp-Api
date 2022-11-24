@@ -54,7 +54,7 @@ public class PresencaService {
         presenca.setValidado(true);
         presenca.setPresente(presente);
         presenca.setNomeFoto(urlFoto);
-        String[] split = date.split("&");
+        String[] split = date.split("-");
         LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
         presenca.setDataCriacao(dateTime);
         presenca.setDataAlteracao(dateTime);
