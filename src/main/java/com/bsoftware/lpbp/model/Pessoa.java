@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -38,6 +39,7 @@ public class Pessoa {
 
     private String codigo;
 
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)

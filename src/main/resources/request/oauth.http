@@ -15,11 +15,11 @@ Authorization: Basic NmY1NTZkNjMtYmNlMy00ZDk3LTk3MTktMmNmODhlYWU5OGE0
 ###
 
 
-POST http://localhost:5000/oauth/token
+POST http://52.204.190.168:8080/oauth/token
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic YW5ndWxhcjpAbmd1bEByMA==
 bmobile: h
 
-client=angular&username=chris@gmail.com&password=chris&grant_type=password
+client=angular&username=otanieljose30@gmail.com&password=octaniel&grant_type=password
 
 > {% client.global.set("access_token", response.body.access_token); %}
