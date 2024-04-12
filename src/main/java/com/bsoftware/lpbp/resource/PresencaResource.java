@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("presenca")
@@ -27,8 +28,8 @@ public class PresencaResource {
     }
 
     @PostMapping
-    public ResponseEntity<Presenca> salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
-        return presencaService.salvar(codigoPessoa, urlFoto, httpServletResponse);
+    public Map<String, Boolean> salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
+        return Map.of("status", presencaService.salvar(codigoPessoa, urlFoto, httpServletResponse));
     }
 
     @PostMapping("offline")

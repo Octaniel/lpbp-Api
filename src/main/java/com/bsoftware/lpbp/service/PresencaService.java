@@ -32,7 +32,7 @@ public class PresencaService {
         this.pessoaRepository = pessoaRepository;
     }
 
-    public ResponseEntity<Presenca> salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
+    public Boolean salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
         Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(codigoPessoa);
         byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
         Presenca presenca = new Presenca();
@@ -42,7 +42,7 @@ public class PresencaService {
         presenca.setValidado(true);
         presenca.setDataCriacao(LocalDateTime.now());
         presenca.setDataAlteracao(LocalDateTime.now());
-        return getPresencaResponseEntity(presenca, httpServletResponse);
+        return getPresencaResponseEntity(presenca, httpServletResponse).getStatusCode().equals(HttpStatus.CREATED);
     }
 
     public ResponseEntity<Presenca> salvarOffline(String codigoPessoa, String urlFoto, String date, boolean presente, HttpServletResponse httpServletResponse) {

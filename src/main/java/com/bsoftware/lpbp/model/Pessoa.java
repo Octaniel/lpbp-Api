@@ -39,7 +39,7 @@ public class Pessoa {
 
     private String codigo;
 
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataNascimento;
 
     @Enumerated(EnumType.STRING)
@@ -65,4 +65,17 @@ public class Pessoa {
     public void antesAtualizar(){
         dataAlteracao = LocalDateTime.now();
     }
+
+    /*
+    *
+    * https://mole-tops-strongly.ngrok-free.app/pessoa {
+  "nome": "<nome>",
+  "apelido": "<apelido>",
+  "email": "<email>",
+  "morada": "<morada>",
+  "telemovel": "<telemovel>",
+  "dataNascimento": "<dataNascimento>",
+  "turno": "<turno>"
+}
+    * */
 }

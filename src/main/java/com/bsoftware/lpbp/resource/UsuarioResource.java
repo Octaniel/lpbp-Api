@@ -50,8 +50,8 @@ public class UsuarioResource {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario Usuario, HttpServletResponse httpServletResponse) {
-        return usuarioService.salvar(Usuario, httpServletResponse);
+    public ResponseEntity<Usuario> salvar(@Valid @RequestBody Usuario usuario, HttpServletResponse httpServletResponse) {
+        return usuarioService.salvar(usuario, httpServletResponse);
     }
 
     @PutMapping("{id}")
