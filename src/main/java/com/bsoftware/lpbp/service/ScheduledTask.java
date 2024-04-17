@@ -3,11 +3,9 @@ package com.bsoftware.lpbp.service;
 import com.bsoftware.lpbp.model.Pessoa;
 import com.bsoftware.lpbp.model.Presenca;
 import com.bsoftware.lpbp.model.Turno;
-import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
@@ -33,8 +31,8 @@ public class ScheduledTask {
         this.usuarioRepository = usuarioRepository;
     }
 
-//    @Scheduled(cron = "0 0 1 * * SUN")
-    public void trocarTurno(){
+    //    @Scheduled(cron = "0 0 1 * * SUN")
+    public void trocarTurno() {
         List<Pessoa> allByTurno = pessoaRepository.findAllByTurno(Turno.MANHA);
         List<Pessoa> allByTurno1 = pessoaRepository.findAllByTurno(Turno.TARDE);
         List<Pessoa> collect = allByTurno.stream().peek(pessoa -> pessoa.setTurno(Turno.TARDE)).
@@ -46,7 +44,7 @@ public class ScheduledTask {
     }
 
     //@Scheduled(cron = "0 0 8-18 ? * MON-SAT")
-    public void registarScheduled(){
+    public void registarScheduled() {
         Random random = new Random();
         int i = random.nextInt(59) + 1;
         long i1 = 1000 * 60 * i;
@@ -59,10 +57,10 @@ public class ScheduledTask {
     }
 
 
-    public void registar(){
+    public void registar() {
         try {
             URL url = new URL("https://onesignal.com/api/v1/notifications");
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setUseCaches(false);
             con.setDoOutput(true);
             con.setDoInput(true);
@@ -72,10 +70,10 @@ public class ScheduledTask {
             con.setRequestMethod("POST");
 
             String strJsonBody = "{"
-                    +   "\"app_id\": \"5d40694c-ae64-4a45-8e40-49e2d3820f42\","
-                    +   "\"included_segments\": [\"Total Subscriptions\"],"
-                    +   "\"contents\": {\"en\": \"Os funcionarios devem marcar ponto agora\"},"
-                    +   "\"headings\": {\"en\": \"Marcar ponto\"}"
+                    + "\"app_id\": \"5d40694c-ae64-4a45-8e40-49e2d3820f42\","
+                    + "\"included_segments\": [\"Total Subscriptions\"],"
+                    + "\"contents\": {\"en\": \"Os funcionarios devem marcar ponto agora\"},"
+                    + "\"headings\": {\"en\": \"Marcar ponto\"}"
                     + "}";
 
             byte[] sendBytes = strJsonBody.getBytes(StandardCharsets.UTF_8);
@@ -90,7 +88,7 @@ public class ScheduledTask {
 
             marcarFalta();
 
-        } catch(Throwable t) {
+        } catch (Throwable t) {
             t.printStackTrace();
         }
     }
@@ -101,12 +99,13 @@ public class ScheduledTask {
                 collect(Collectors.toList());
         LocalDateTime now = LocalDateTime.now();
         Turno turno;
-        if (now.getHour() > 13 || (now.getHour() == 13 && now.getMinute()-10 >= 30)) {
+        if (now.getHour() > 13 || (now.getHour() == 13 && now.getMinute() - 10 >= 30)) {
             turno = Turno.TARDE;
         } else {
             turno = Turno.MANHA;
         }
-        List<Pessoa> collect1 = pessoaRepository.findAllByTurno(turno).stream().filter(collect::contains).collect(Collectors.toList());
+        List<Pessoa> collect1 = pessoaRepository.findAllByTurno(turno).stream().
+                filter(pessoa -> !collect.contains(pessoa)).collect(Collectors.toList());
         salvarPresencaFalta(collect1);
     }
 
@@ -125,7 +124,7 @@ public class ScheduledTask {
 
     }
 
-    public void setarTodosAsPresencasParaPresenteEntre(LocalDateTime de, LocalDateTime ate){
+    public void setarTodosAsPresencasParaPresenteEntre(LocalDateTime de, LocalDateTime ate) {
         List<Presenca> presencas = presencaRepository.presencasEntre(de, ate);
         presencaRepository.deleteAll(presencas);
     }
