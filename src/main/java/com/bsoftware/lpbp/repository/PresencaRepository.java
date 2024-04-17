@@ -18,4 +18,6 @@ public interface PresencaRepository extends JpaRepository<Presenca, Long>, Prese
     List<Presenca> findAllByValidado(Boolean validado);
     @Query("select p from Presenca p where p.dataCriacao>=?1 and p.dataCriacao<=?2")
     List<Presenca> presencasEntre(LocalDateTime de, LocalDateTime ate);
+    @Query("select p from Presenca p where p.dataCriacao>=?1")
+    List<Presenca> presencasDeParaca(LocalDateTime de);
 }

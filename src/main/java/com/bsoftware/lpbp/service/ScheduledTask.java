@@ -7,6 +7,7 @@ import com.bsoftware.lpbp.model.Usuario;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
@@ -44,7 +45,7 @@ public class ScheduledTask {
         pessoaRepository.saveAll(collect1);
     }
 
-//    @Scheduled(cron = "0 0 8-18 ? * MON-SAT")
+    //@Scheduled(cron = "0 0 8-18 ? * MON-SAT")
     public void registarScheduled(){
         Random random = new Random();
         int i = random.nextInt(59) + 1;
@@ -67,12 +68,12 @@ public class ScheduledTask {
             con.setDoInput(true);
 
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("Authorization", "Basic ODFlODdhMTUtMDAwNy00MTIxLTkwZTgtYTVlNDM0OGM3MTA0");
+            con.setRequestProperty("Authorization", "Basic ODZlNzYzZjQtNmVkYy00MjkwLWJkZTEtY2FiYWIyMTJjM2M4");
             con.setRequestMethod("POST");
 
             String strJsonBody = "{"
-                    +   "\"app_id\": \"b856e4e5-e7c5-46cf-95e6-b67aea0fa4e7\","
-                    +   "\"included_segments\": [\"Subscribed Users\"],"
+                    +   "\"app_id\": \"5d40694c-ae64-4a45-8e40-49e2d3820f42\","
+                    +   "\"included_segments\": [\"Total Subscriptions\"],"
                     +   "\"contents\": {\"en\": \"Os funcionarios devem marcar ponto agora\"},"
                     +   "\"headings\": {\"en\": \"Marcar ponto\"}"
                     + "}";
@@ -95,24 +96,22 @@ public class ScheduledTask {
     }
 
     public void marcarFalta() {
-        List<Presenca> allByValidado = presencaRepository.findAllByValidado(false);
+        List<Presenca> allByValidado = presencaRepository.presencasDeParaca(LocalDateTime.now().minusMinutes(10));
         List<Pessoa> collect = allByValidado.stream().map(Presenca::getPessoa).
                 collect(Collectors.toList());
         LocalDateTime now = LocalDateTime.now();
-        if (now.getHour() > 13 || (now.getHour() == 13 && now.getMinute() >= 30)) {
-            usuarioRepository.findByPessoaTurnoAndTipo(Turno.TARDE, "Vendedor").stream().map(Usuario::getPessoa).
-                    collect(Collectors.toList()).forEach(pessoa -> salvarPresencaFalta(collect, pessoa));
+        Turno turno;
+        if (now.getHour() > 13 || (now.getHour() == 13 && now.getMinute()-10 >= 30)) {
+            turno = Turno.TARDE;
         } else {
-            usuarioRepository.findByPessoaTurnoAndTipo(Turno.MANHA, "Vendedor").stream().map(Usuario::getPessoa).
-            collect(Collectors.toList()).forEach(pessoa -> salvarPresencaFalta(collect, pessoa));
+            turno = Turno.MANHA;
         }
-        List<Presenca> collect1 = allByValidado.stream().peek(presenca -> presenca.setValidado(true)).
-                collect(Collectors.toList());
-        presencaRepository.saveAll(collect1);
+        List<Pessoa> collect1 = pessoaRepository.findAllByTurno(turno).stream().filter(collect::contains).collect(Collectors.toList());
+        salvarPresencaFalta(collect1);
     }
 
-    private void salvarPresencaFalta(List<Pessoa> collect, Pessoa pessoa) {
-        if (!containPessoa(collect,pessoa)) {
+    private void salvarPresencaFalta(List<Pessoa> collect) {
+        collect.forEach(pessoa -> {
             Presenca presenca = new Presenca();
             presenca.setPresente(false);
             presenca.setValidado(true);
@@ -122,16 +121,8 @@ public class ScheduledTask {
             presenca.setDataCriacao(now1);
             presenca.setJustificada(false);
             presencaRepository.save(presenca);
-        }
-    }
+        });
 
-    private boolean containPessoa(List<Pessoa> pessoas, Pessoa pessoa) {
-        for (Pessoa pessoa1 : pessoas){
-            if(pessoa1.getId().equals(pessoa.getId())){
-                return true;
-            }
-        }
-        return false;
     }
 
     public void setarTodosAsPresencasParaPresenteEntre(LocalDateTime de, LocalDateTime ate){

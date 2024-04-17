@@ -66,6 +66,20 @@ public class Pessoa {
         dataAlteracao = LocalDateTime.now();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pessoa pessoa = (Pessoa) o;
+        return id.equals(pessoa.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     /*
     *
     * https://mole-tops-strongly.ngrok-free.app/pessoa {
