@@ -8,6 +8,7 @@ import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
@@ -46,7 +47,7 @@ public class ScheduledTask {
 //        pessoaRepository.saveAll(collect1);
 //    }
 
-    //@Scheduled(cron = "0 0 8-18 ? * MON-SAT")
+    @Scheduled(cron = "0 0 8-18 ? * MON-SAT")
     public void registarScheduled() {
         Random random = new Random();
         int i = random.nextInt(59) + 1;
