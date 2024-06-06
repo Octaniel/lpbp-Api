@@ -35,16 +35,16 @@ public class ScheduledTask {
     }
 
     //    @Scheduled(cron = "0 0 1 * * SUN")
-    public void trocarTurno() {
-        List<Pessoa> allByTurno = pessoaRepository.findAllByTurno(Turno.MANHA);
-        List<Pessoa> allByTurno1 = pessoaRepository.findAllByTurno(Turno.TARDE);
-        List<Pessoa> collect = allByTurno.stream().peek(pessoa -> pessoa.setTurno(Turno.TARDE)).
-                collect(Collectors.toList());
-        pessoaRepository.saveAll(collect);
-        List<Pessoa> collect1 = allByTurno1.stream().peek(pessoa -> pessoa.setTurno(Turno.MANHA)).
-                collect(Collectors.toList());
-        pessoaRepository.saveAll(collect1);
-    }
+//    public void trocarTurno() {
+//        List<Pessoa> allByTurno = pessoaRepository.findAllByTurno(Turno.MANHA);
+//        List<Pessoa> allByTurno1 = pessoaRepository.findAllByTurno(Turno.TARDE);
+//        List<Pessoa> collect = allByTurno.stream().peek(pessoa -> pessoa.setTurno(Turno.TARDE)).
+//                collect(Collectors.toList());
+//        pessoaRepository.saveAll(collect);
+//        List<Pessoa> collect1 = allByTurno1.stream().peek(pessoa -> pessoa.setTurno(Turno.MANHA)).
+//                collect(Collectors.toList());
+//        pessoaRepository.saveAll(collect1);
+//    }
 
     //@Scheduled(cron = "0 0 8-18 ? * MON-SAT")
     public void registarScheduled() {
