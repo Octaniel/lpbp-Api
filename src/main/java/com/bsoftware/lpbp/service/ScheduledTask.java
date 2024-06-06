@@ -6,6 +6,8 @@ import com.bsoftware.lpbp.model.Turno;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.repository.UsuarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.OutputStream;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class ScheduledTask {
 
+    private static final Logger log = LoggerFactory.getLogger(ScheduledTask.class);
     private final PessoaRepository pessoaRepository;
     private final PresencaRepository presencaRepository;
     private final UsuarioRepository usuarioRepository;
@@ -104,7 +107,7 @@ public class ScheduledTask {
         } else {
             turno = Turno.MANHA;
         }
-        List<Pessoa> collect1 = pessoaRepository.findAllByTurno(turno).stream().
+        List<Pessoa> collect1 = pessoaRepository.findAllByTurnoOrTurno(turno, Turno.DOIS).stream().
                 filter(pessoa -> !collect.contains(pessoa)).collect(Collectors.toList());
         salvarPresencaFalta(collect1);
     }

@@ -50,7 +50,8 @@ class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.cors().and().authorizeRequests().antMatchers("/pessoa","/usuario/listar", "/oauth/token", "/presenca/**", "/presenca/offline").permitAll()
+        http.cors().and().authorizeRequests().antMatchers("/pessoa","/usuario/listar", "/usuario/registar",
+                        "/oauth/token", "/presenca/**", "/presenca/offline", "/upload").permitAll()
                 .anyRequest()
                 .authenticated().and()
                 .sessionManagement()

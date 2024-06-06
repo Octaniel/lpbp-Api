@@ -32,7 +32,7 @@ public class PresencaService {
         this.pessoaRepository = pessoaRepository;
     }
 
-    public Boolean salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
+    public Boolean salvar(String codigoPessoa, String urlFoto) {
         Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(codigoPessoa);
         byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
         Presenca presenca = new Presenca();
@@ -42,7 +42,7 @@ public class PresencaService {
         presenca.setValidado(true);
         presenca.setDataCriacao(LocalDateTime.now());
         presenca.setDataAlteracao(LocalDateTime.now());
-        return getPresencaResponseEntity(presenca, httpServletResponse).getStatusCode().equals(HttpStatus.CREATED);
+        return getPresencaResponseEntity(presenca).getStatusCode().equals(HttpStatus.CREATED);
     }
 
     public ResponseEntity<Presenca> salvarOffline(String codigoPessoa, String urlFoto, String date, boolean presente, HttpServletResponse httpServletResponse) {
@@ -58,15 +58,14 @@ public class PresencaService {
         LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]), Integer.parseInt(split[3]), Integer.parseInt(split[4]), Integer.parseInt(split[5]));
         presenca.setDataCriacao(dateTime);
         presenca.setDataAlteracao(dateTime);
-        return getPresencaResponseEntity(presenca, httpServletResponse);
+        return getPresencaResponseEntity(presenca);
     }
 
-    private ResponseEntity<Presenca> getPresencaResponseEntity(Presenca presenca, HttpServletResponse httpServletResponse) {
+    private ResponseEntity<Presenca> getPresencaResponseEntity(Presenca presenca) {
         presenca.setJustificada(false);
         presenca.setDataAlteracao(presenca.getDataCriacao());
         presencas.add(presenca);
         Presenca save = presencaRepository.save(presenca);
-        publisher.publishEvent(new RecursoCriadoEvent(this, httpServletResponse, save.getId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(save);
     }
 

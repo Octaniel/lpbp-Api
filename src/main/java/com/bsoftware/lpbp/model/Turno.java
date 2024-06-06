@@ -1,5 +1,5 @@
 package com.bsoftware.lpbp.model;
 
 public enum Turno {
-    MANHA,TARDE,FERIA
+    MANHA,TARDE,DOIS,FERIA
 }

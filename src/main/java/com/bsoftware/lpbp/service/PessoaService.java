@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -27,6 +28,11 @@ public class PessoaService {
                          PessoaRepository pessoaRepository) {
         this.publisher = publisher;
         this.pessoaRepository = pessoaRepository;
+    }
+
+    public void checkPersonByCode(String codigoPessoa){
+        Optional<Pessoa> byCodigo = pessoaRepository.findByCodigoEquals(codigoPessoa);
+        byCodigo.orElseThrow(() -> new UsuarioException("Nenhum funcionario existente"));
     }
 
     public boolean salvar(Pessoa pessoa) {

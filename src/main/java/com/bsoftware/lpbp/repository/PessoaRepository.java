@@ -17,7 +17,7 @@ import java.util.Optional;
  */
 public interface PessoaRepository extends JpaRepository<Pessoa, Long>, PessoaRepositoryQuery {
     Optional<Pessoa> findByCodigoEquals(String codigo);
-    List<Pessoa> findAllByTurno(Turno turno);
+    List<Pessoa> findAllByTurnoOrTurno(Turno turno, Turno turno2);
     Pessoa findByCodigo(String codigo);
     Pessoa findByNomeAndApelido(String nome, String apelido);
 }

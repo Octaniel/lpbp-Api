@@ -28,8 +28,8 @@ public class PresencaResource {
     }
 
     @PostMapping
-    public Map<String, Boolean> salvar(String codigoPessoa, String urlFoto, HttpServletResponse httpServletResponse) {
-        return Map.of("status", presencaService.salvar(codigoPessoa, urlFoto, httpServletResponse));
+    public Map<String, Boolean> salvar(String codigoPessoa, String urlFoto) {
+        return Map.of("status", presencaService.salvar(codigoPessoa, urlFoto));
     }
 
     @PostMapping("offline")
