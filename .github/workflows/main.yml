@@ -35,6 +35,6 @@ jobs:
           user: ${{ secrets.CLOUD_USER }}
           pass: '${{ secrets.CLOUD_PASS }}'
           script: |
-            echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker rmi $(echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker images impostos/lpbp:cloud -a -q) -f
+            echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker rmi $(echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker images otaniel/lpbp-api:0.1.0 -a -q) -f
             echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker run --name lpbp-backend -d -p 8082:8080 otaniel/lpbp-api:0.1.0 --restart
 
