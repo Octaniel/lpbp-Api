@@ -28,3 +28,15 @@ jobs:
           docker build -t lpbp-api .
           docker tag lpbp-api otaniel/lpbp-api:0.1.0
           docker push otaniel/lpbp-api:0.1.0
+      - name: ssh-pipeline
+        uses: cross-the-world/ssh-pipeline@v1.2.0
+        with:
+          host: ${{ secrets.CLOUD_HOST }}
+          user: ${{ secrets.CLOUD_USER }}
+          pass: '${{ secrets.CLOUD_PASS }}'
+          script: |
+            echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker stop lpbp-backend
+            echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker rm lpbp-backend
+            echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker rmi $(echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker images impostos/lpbp:cloud -a -q) -f
+            echo '${{ secrets.CLOUD_PASS }}'|sudo -S docker run --name lpbp-backend -d -p 8082:8080 otaniel/lpbp-api:0.1.0 --restart
+
