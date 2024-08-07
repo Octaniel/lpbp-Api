@@ -5,6 +5,7 @@ import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.repository.filter.PresencaFilter;
 import com.bsoftware.lpbp.repository.projection.PresencaResumo;
 import com.bsoftware.lpbp.service.PresencaService;
+import org.jboss.logging.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 @RestController
 @RequestMapping("presenca")
@@ -68,7 +71,7 @@ public class PresencaResource {
             file1 = ResourceUtils.getFile("classpath:docs/saida.jpg");
             multipartFile.transferTo(file1);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log( Logger.Level.ERROR , e);
         }
     }
 }

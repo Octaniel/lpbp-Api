@@ -1,7 +1,9 @@
-FROM adoptopenjdk/openjdk11:ubi
+FROM maven:3.8.2-jdk-11 AS build
+COPY . .
+RUN mvn clean package -Pprod -DskipTests
 
+FROM openjdk:11-jdk-slim
 EXPOSE 8080
-
-ADD target/lpbp-api.jar lpbp-api.jar
+COPY --from=build /target/lpbp-api.jar lpbp-api.jar
 
 ENTRYPOINT ["java", "-jar", "lpbp-api.jar"]
