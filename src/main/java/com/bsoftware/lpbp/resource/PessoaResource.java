@@ -2,6 +2,7 @@ package com.bsoftware.lpbp.resource;
 
 import com.bsoftware.lpbp.model.Pessoa;
 import com.bsoftware.lpbp.model.Presenca;
+import com.bsoftware.lpbp.model.dtos.Pessoadto;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.repository.PresencaRepository;
 import com.bsoftware.lpbp.service.PessoaService;
@@ -11,11 +12,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-/**
- * User: Octaniel
- * Date: 06/10/2020
- * Time: 07:02
- */
 @RestController
 @RequestMapping("pessoa")
 public class PessoaResource {
@@ -44,5 +40,10 @@ public class PessoaResource {
     @PostMapping
     public Map<String, Boolean> salvar(@Valid @RequestBody Pessoa pessoa) {
         return Map.of("status", pessoaService.salvar(pessoa));
+    }
+
+    @PutMapping
+    public Map<String, Boolean> update(@Valid @RequestBody Pessoadto pessoa) {
+        return Map.of("status", pessoaService.update(pessoa));
     }
 }

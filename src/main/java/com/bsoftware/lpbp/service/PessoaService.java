@@ -3,6 +3,7 @@ package com.bsoftware.lpbp.service;
 import com.bsoftware.lpbp.event.RecursoCriadoEvent;
 import com.bsoftware.lpbp.model.Pessoa;
 import com.bsoftware.lpbp.model.Usuario;
+import com.bsoftware.lpbp.model.dtos.Pessoadto;
 import com.bsoftware.lpbp.repository.PessoaRepository;
 import com.bsoftware.lpbp.service.exeption.UsuarioException;
 import org.springframework.context.ApplicationEventPublisher;
@@ -44,6 +45,13 @@ public class PessoaService {
         pessoa.setCodigo(s);
 
         pessoaRepository.save(pessoa);
+        return true;
+    }
+
+    public boolean update(Pessoadto pessoa) {
+        Pessoa pessoa1 = pessoaRepository.getOne(pessoa.getId());
+        validar(pessoa.toPessoa(pessoa1));
+        pessoaRepository.save(pessoa1);
         return true;
     }
 
